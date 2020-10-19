@@ -8,7 +8,7 @@
 using Children = std::vector<std::shared_ptr<FileSystemComponent>>;
 using Child = std::shared_ptr<FileSystemComponent>;
 
-class Directory : public FileSystemComponent
+class Directory : public FileSystemComponent //Composite
 {
     Children children_{};
     int size_{512};

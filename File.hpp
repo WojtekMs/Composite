@@ -1,7 +1,7 @@
 #pragma once
 #include "FileSystemComponent.hpp"
 
-class File : public FileSystemComponent
+class File : public FileSystemComponent //Leaf
 {
     int size_{};
     std::string name_{};
