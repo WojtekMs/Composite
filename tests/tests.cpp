@@ -1,7 +1,8 @@
-#include "gtest/gtest.h"
-
 #include "Directory.hpp"
 #include "File.hpp"
+#include "Tar.hpp"
+
+#include "gtest/gtest.h"
 
 class DirectoryTest : public ::testing::Test
 {
@@ -17,6 +18,9 @@ class DirectoryTest : public ::testing::Test
     const std::string defaultDirectoryName = "directory";
     const std::string firstDirectoryName = "firstDir";
     const std::string secondDirectoryName = "secondDir";
+
+    const std::string defaultTarName = "tarArchive";
+    const int defaultTarSize = 300;
 };
 
 TEST_F(DirectoryTest, filesCanBeAddedToDirectory)
@@ -38,18 +42,21 @@ TEST_F(DirectoryTest, filesCanBeRemovedFromDirectory)
     EXPECT_EQ(dir.getChildren().front()->getSize(), firstFileSize);
 }
 
-TEST_F(DirectoryTest, emptyDirectorySizeShouldBe512) {
+TEST_F(DirectoryTest, emptyDirectorySizeShouldBe512)
+{
     constexpr int expectedDirSize = 512;
     EXPECT_EQ(dir.getSize(), expectedDirSize);
 }
 
-TEST_F(DirectoryTest, directoryShouldCountSizeOfContainingFiles) {
+TEST_F(DirectoryTest, directoryShouldCountSizeOfContainingFiles)
+{
     dir.add(std::make_shared<File>(firstFileName, firstFileSize));
     dir.add(std::make_shared<File>(secondFileName, secondFileSize));
     EXPECT_EQ(dir.getSize(), defaultDirectorySize + firstFileSize + secondFileSize);
 }
 
-TEST_F(DirectoryTest, directoryShouldCountSizeOfOtherDirs) {
+TEST_F(DirectoryTest, directoryShouldCountSizeOfOtherDirs)
+{
     Directory anotherDir;
     Directory secondDir(secondDirectoryName);
     anotherDir.add(std::make_shared<Directory>(firstDirectoryName));
@@ -61,4 +68,18 @@ TEST_F(DirectoryTest, directoryShouldCountSizeOfOtherDirs) {
     int totalDirCount = 4;
     int expectedDirSize = defaultDirectorySize * totalDirCount + firstFileSize;
     EXPECT_EQ(dir.getSize(), expectedDirSize);
+}
+
+TEST_F(DirectoryTest, tarShouldReturnHalfSizeOfWhatItContains)
+{
+    auto directory = std::make_shared<Directory>(firstDirectoryName);
+    directory->add(std::make_shared<File>(firstFileName, firstFileSize));
+    directory->add(std::make_shared<Directory>(defaultDirectoryName));
+    directory->add(std::make_shared<File>(secondFileName, secondFileSize));
+
+    auto archive = std::make_shared<Tar>(defaultTarName, directory);
+    int totalDirectoryCount = 2;
+    int expectedArchiveSize =
+        (defaultDirectorySize * totalDirectoryCount + firstFileSize + secondFileSize) * 0.5 + defaultTarSize;
+    EXPECT_EQ(archive->getSize(), expectedArchiveSize);
 }
