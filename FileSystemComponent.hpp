@@ -2,5 +2,5 @@
 
 class FileSystemComponent {
     virtual ~FileSystemComponent() = default;
-    virtual unsigned int getSize() = 0;
+    virtual int getSize() const = 0;
 };
