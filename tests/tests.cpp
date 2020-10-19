@@ -1,7 +1,8 @@
 #include "gtest/gtest.h"
+#include "Directory.hpp"
+class DirectoryTest : public ::testing::Test {
+};
 
-TEST(Composite, usage) {
-    Termomether term;
-    term.measure();
-    
+TEST(DirectoryTest, directoryCanBeCreated) {
+    Directory empty;
 }

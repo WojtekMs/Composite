@@ -37,6 +37,7 @@ project(Composite)
 add_executable(${PROJECT_NAME} main.cpp)
 add_executable(${PROJECT_NAME}-ut tests/tests.cpp)
 target_link_libraries(${PROJECT_NAME}-ut gtest_main)
+target_include_directories(${PROJECT_NAME}-ut PRIVATE ${CMAKE_SOURCE_DIR})
 
 enable_testing()
 add_test(NAME composite_tests COMMAND ${PROJECT_NAME}-ut)
