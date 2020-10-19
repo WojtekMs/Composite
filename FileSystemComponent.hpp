@@ -1,6 +1,8 @@
 #pragma once
 
-class FileSystemComponent {
+class FileSystemComponent
+{
+   public:
     virtual ~FileSystemComponent() = default;
     virtual int getSize() const = 0;
 };
